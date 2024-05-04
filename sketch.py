@@ -2,10 +2,27 @@ from p5 import *
 
 
 def setup():
-  global colors,pianokey,state, colors2
+  global colors,pianokey,state, colors2,colors3,keysused,first,freq,osc,isPlaying
+  isPlaying = False
+  #Freuency of "Middle C" note
+  first = 256
+  # 256 288 320 341.3 384 426.6 480 512
+  freq = [
+    first,
+    first * 9/8,
+    first * 5/4,
+    first * 4/3,
+    first * 3/2,
+    first * 5/3,
+    first * 15/8,
+    first * 2
+  ]
+  osc = []
   createCanvas(500,500)
   colors=["#f76565", "#f5985b", "#e8f255", "#69f56c", "#62caf0", "#549af0", "#cb7afa", "#f797d2"]
+  colors3=colors
   colors2=["#f78b8b", "#f5b184", "#f2fa89", "#96f298", "#98dcf5", "#8cbbf5", "#e5c6f7", "#f7bee1"]
+  keysused = ["3", "4", "5", "6", "7", "8", "9", "0"]
   pianokey  = {
     "x": 150, "y": 350, "w":25, "h":100, "r":10, "c":"#f76565"
   }
@@ -45,25 +62,64 @@ def clickingtostart ():
   
   
 def mousePressed():
-  global state
+  global state,freq,osc,isPlaying
   state = "clicked"
   
+  if isPlaying==False:
+    isPlaying=True
+    for i in range(8):
+      o=p5.Oscillator("triangle")
+      o.start()
+      o.amp (0)
+      o.freq(freq[i])
+      osc.append(o)
+  
 def keyPressed ():
-  global colors2, colors
-  if keyCode == 51:
-    colors[0]=colors2[0]
+  
+  global colors2, colors,keysused,osc
+  for i in range(8):
+    if key==keysused[i]:
+      colors[i]=colors2[i]
+      osc[i].amp(0.5)
+    
  
 
 def keyReleased ():
-  global colors2, colors
+  global colors2, colors,osc
   if keyCode == 51:
     colors[0]="#f76565"
-
+    osc[0].amp(0)
+  if keyCode == 52:
+    colors[1]="#f5985b"
+    osc[1].amp(0)
+  if keyCode == 53:
+    colors[2]="#e8f255"
+    osc[2].amp(0)
+  if keyCode == 54:
+    colors[3]="#69f56c"
+    osc[3].amp(0)
+  if keyCode == 55:
+    colors[4]="#62caf0"
+    osc[4].amp(0)
+  if keyCode == 56:
+    colors[5]="#549af0"
+    osc[5].amp(0)
+  if keyCode == 57:
+    colors[6]="#cb7afa"
+    osc[6].amp(0)
+  if keyCode == 48:
+    colors[7]="#f797d2"
+    osc[7].amp(0)
     
 
 
 
 '''
+global colors2, colors, keysused
+for j in range(8):
+  if key==keysused[j]:
+    colors2[j]=colors3[j]
+
 Project Approach:
 1. keyboard
 2. keys
